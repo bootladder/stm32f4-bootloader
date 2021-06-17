@@ -12,6 +12,10 @@ FLASH_Status status;
 extern volatile bool usart_rx_byte_received;
 extern volatile uint8_t usart_rx_byte_value;
 
+static int readLineIndex = 0;
+
+static void readLine(uint8_t * buf);
+
 void main(void){
     led_init();
     led_red_on();
@@ -39,14 +43,33 @@ void main(void){
 //    FLASH_Lock();
     PRINTSTRING("Done\n")
 
+    static uint8_t lineBuf[256];
 
     while(1){
-        if(usart_rx_byte_received){
-            usart_rx_byte_received = false;
-            outbyte(usart_rx_byte_value);
-        }
-//        int byte = inbyte();
+        readLine(lineBuf);
 
+        PRINTSTRING("LINE READ\n")
+    }
+
+}
+
+static void readLine(uint8_t * buf){
+
+    bool done = false;
+    while(!done){
+        while(false == usart_rx_byte_received)
+            ;
+
+        usart_rx_byte_received = false;
+        outbyte(usart_rx_byte_value);
+        if(usart_rx_byte_value == '\n'){
+            readLineIndex = 0;
+            done = true;
+        }
+
+        buf[readLineIndex++] = usart_rx_byte_value;
+        if(readLineIndex == 256)
+            readLineIndex = 0;
     }
 
 }
