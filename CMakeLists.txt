@@ -8,10 +8,14 @@ include_directories(./src/hal)
 
 add_executable(stm32f4-bootloader
         src/main.c
+        src/printing_help.c
+
         src/target/led.c
+        src/target/usart.c
 
         src/hal/stm32f4xx_gpio.c
         src/hal/stm32f4xx_rcc.c
+        src/hal/stm32f4xx_usart.c
         src/hal/startup_stm32f4xx.s.o
         src/hal/system_stm32f4xx.c
         )
