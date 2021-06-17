@@ -3,6 +3,7 @@
 #include "printing_help.h"
 
 #include "stm32f4xx_flash.h"
+#include "commandlineprotocol.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -12,7 +13,7 @@ FLASH_Status status;
 extern volatile bool usart_rx_byte_received;
 extern volatile uint8_t usart_rx_byte_value;
 
-static int readLineIndex = 0;
+static uint32_t readLineIndex = 0;
 
 static void readLine(uint8_t * buf);
 
@@ -47,7 +48,7 @@ void main(void){
 
     while(1){
         readLine(lineBuf);
-
+        commandlineprotocol_processLine(lineBuf);
         PRINTSTRING("LINE READ\n")
     }
 
@@ -55,16 +56,17 @@ void main(void){
 
 static void readLine(uint8_t * buf){
 
-    bool done = false;
-    while(!done){
+    while(1){
         while(false == usart_rx_byte_received)
             ;
 
         usart_rx_byte_received = false;
         outbyte(usart_rx_byte_value);
+
         if(usart_rx_byte_value == '\n'){
+            buf[readLineIndex++] = usart_rx_byte_value;
             readLineIndex = 0;
-            done = true;
+            break;
         }
 
         buf[readLineIndex++] = usart_rx_byte_value;

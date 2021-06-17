@@ -8,6 +8,7 @@ include_directories(./src/hal)
 
 add_executable(stm32f4-bootloader
         src/main.c
+        src/commandlineprotocol.c
         src/printing_help.c
 
         src/target/led.c
