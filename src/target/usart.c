@@ -12,6 +12,10 @@
 
 #include "usart.h"
 #include "stm32f4xx.h"
+#include <stdbool.h>
+
+volatile bool usart_rx_byte_received = false;
+volatile uint8_t usart_rx_byte_value ;
 
 /* USART setup */
 void setup_usart(void)
@@ -54,6 +58,12 @@ void setup_usart(void)
 	
 	/* Enable USART */
 	USART_Cmd(USART1, ENABLE);
+
+
+	// Interupts
+    USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+    NVIC_EnableIRQ(USART1_IRQn);
+
 }
 
 /**
@@ -95,3 +105,11 @@ int hexdigit_2_asciichar(int hex) {
     return 'A' + (hex - 10);
 }
 
+
+
+void USART1_IRQHandler(void){
+    usart_rx_byte_received = true;
+    USART_ClearFlag(USART1, USART_FLAG_RXNE);
+
+    usart_rx_byte_value = USART_ReceiveData(USART1);
+}
