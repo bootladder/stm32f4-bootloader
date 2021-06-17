@@ -16,6 +16,7 @@ add_executable(stm32f4-bootloader
         src/hal/stm32f4xx_gpio.c
         src/hal/stm32f4xx_rcc.c
         src/hal/stm32f4xx_usart.c
+        src/hal/stm32f4xx_flash.c
         src/hal/startup_stm32f4xx.s.o
         src/hal/system_stm32f4xx.c
         )
