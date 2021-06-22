@@ -9,29 +9,61 @@
 #include "ihexcommandparser.h"
 #include "ihexcommandparser_private.h"
 #include "hex2int.h"
+#include <string.h>
 
-static void good_ones(){
+static void good_ones_check_status_and_struct_content(){
     uint8_t * line;
-    IHexCommand_t * cmd;
+    IHexCommand_t cmd;
     IHexCommandParserStatus_t status;
+    uint8_t * expected_data;
 
+/////////////////////////////////////////////
     line = ":10010000214601360121470136007EFE09D2190140\n";
-    status = ihexcommandparser_parse(line, cmd);
+    status = ihexcommandparser_parse(line, &cmd);
 
-    if(status != INTELHEXCOMMAND_OK)
-        printf("FAIL NOT GOOD, status is %d\n", status);
+    if(status != INTELHEXCOMMAND_OK) {
+        printf("1 FAIL NOT GOOD, status is %d\n", status);
+    }
 
+    if(cmd.record_length != 16) printf("record length not 16");
+    if(cmd.record_type != IHEXRECORDTYPE_DATA) printf("record type not 0");
+    if(cmd.base_address_offset != 256) printf("base address offset not 256");
+    if(cmd.checksum != 0x40) printf("checksum not 0x40");
+
+    expected_data = (uint8_t []) {
+            0x21, 0x46, 0x01, 0x36, 0x01, 0x21, 0x47, 0x01, 0x36, 0x00, 0x7E, 0xFE, 0x09, 0xD2, 0x19, 0x01
+    };
+    if(memcmp(cmd.record_data, expected_data, 16) != 0) printf("Data mismatch");
+
+
+/////////////////////////////////////////////
     line = ":100130003F0156702B5E712B722B732146013421C7\n";
-    status = ihexcommandparser_parse(line, cmd);
+    status = ihexcommandparser_parse(line, &cmd);
 
-    if(status != INTELHEXCOMMAND_OK)
-        printf("FAIL NOT GOOD, status is %d\n", status);
+    if(status != INTELHEXCOMMAND_OK) {
+        printf("2 FAIL NOT GOOD, status is %d\n", status);
+    }
 
+
+    if(cmd.record_length != 16) printf("record length not 16");
+    if(cmd.record_type != IHEXRECORDTYPE_DATA) printf("record type not 0");
+    if(cmd.base_address_offset != 0x0130) printf("base address offset not 0x0130");
+    if(cmd.checksum != 0xC7) printf("checksum not 0x40");
+
+    expected_data = (uint8_t []) {
+            0x3F, 0x01, 0x56, 0x70, 0x2B, 0x5E, 0x71, 0x2B, 0x72, 0x2B, 0x73, 0x21, 0x46, 0x01, 0x34, 0x21
+    };
+    if(memcmp(cmd.record_data, expected_data, 16) != 0) printf("Data mismatch");
+
+
+/////////////////////////////////////////////
     line = ":00000001FF\n";
-    status = ihexcommandparser_parse(line, cmd);
+    status = ihexcommandparser_parse(line, &cmd);
 
     if(status != INTELHEXCOMMAND_OK)
-        printf("FAIL NOT GOOD, status is %d\n", status);
+        printf("3 FAIL NOT GOOD, status is %d\n", status);
+
+    if(cmd.record_type != IHEXRECORDTYPE_ENDOFFILE) printf("record type not 1");
 
 }
 
@@ -137,5 +169,5 @@ void test_ihexcommandparser(){
     hex2int_works();
     record_data_length();
     record_type();
-    good_ones();
+    good_ones_check_status_and_struct_content();
 }
