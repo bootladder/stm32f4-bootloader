@@ -3,6 +3,7 @@
 //
 
 #include "commandlineprotocol.h"
+#include "bootloader.h"
 #include "ihexcommandparser.h"
 #include "printing_help.h"
 
@@ -19,7 +20,7 @@ void commandlineprotocol_processLine(uint8_t * line){
         IHexCommandParserStatus_t ihexstatus = ihexcommandparser_parse(line, &ihexcmd);
 
         if(INTELHEXCOMMAND_OK == ihexstatus){
-            PRINTSTRING("IHEX Command!!\n");
+            bootloader_process_ihexcommand(&ihexcmd);
         }
         else{
             PRINTSTRING("INVALID IHEX COMMAND!!\n");
