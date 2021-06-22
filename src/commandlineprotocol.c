@@ -2,16 +2,36 @@
 // Created by steve on 6/17/21.
 //
 
-#include <src/target/usart.h>
 #include "commandlineprotocol.h"
+#include "ihexcommandparser.h"
 #include "printing_help.h"
+
+#include <string.h>
+
+static IHexCommand_t ihexcmd;
+
 void commandlineprotocol_processLine(uint8_t * line){
 
-    if(line[0] == 'a'){
-       PRINTSTRING("Good Comamand!\n")
+    if(0 == strncmp(line, "erase sector", 11)){
+        PRINTSTRING("Erase!\n")
+    }
+    else if(line[0] == ':'){
+        IHexCommandParserStatus_t ihexstatus = ihexcommandparser_parse(line, &ihexcmd);
+
+        if(INTELHEXCOMMAND_OK == ihexstatus){
+            PRINTSTRING("IHEX Command!!\n");
+        }
+        else{
+            PRINTSTRING("INVALID IHEX COMMAND!!\n");
+        }
+    }
+    else if(0 == strncmp(line, "verify", 6)){
+        PRINTSTRING("Verify!\n")
+    }
+    else if(0 == strncmp(line, "help", 4)){
+        PRINTSTRING("Help!\n")
     }
     else{
-        PRINTSTRING("Commands must start with 'a', not ... ")
-        outbyte(line[0]);
+        PRINTSTRING("Invalid Command!\n")
     }
 }

@@ -4,6 +4,7 @@
 
 #include "stm32f4xx_flash.h"
 #include "commandlineprotocol.h"
+#include "bootloader.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -21,7 +22,6 @@ void main(void){
     led_init();
     led_red_on();
     setup_usart();
-    PRINTSTRING("STM32F4 BOOTLOADER\n")
 
     FLASH_Unlock();
 
@@ -42,14 +42,24 @@ void main(void){
 //
 
 //    FLASH_Lock();
-    PRINTSTRING("Done\n")
+//    PRINTSTRING("Done\n")
+
+
+    bootloader_print_welcome();  // name, version, config
+    bootloader_print_app_status();  //description, validity, sizes, checksum
+//    bootloader_print_initial_prompt();  // "press any key"
+
+//    if(NO_USER_INPUT == prompt_and_wait_for_any_input(1000)){
+//        bootloader_run_user_application();
+//    }
+
+    // else serve CLI interface
 
     static uint8_t lineBuf[256];
 
     while(1){
         readLine(lineBuf);
         commandlineprotocol_processLine(lineBuf);
-        PRINTSTRING("LINE READ\n")
     }
 
 }

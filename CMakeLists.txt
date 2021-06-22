@@ -10,6 +10,7 @@ add_executable(stm32f4-bootloader
         src/main.c
         src/commandlineprotocol.c
         src/printing_help.c
+        src/bootloader.c
 
         src/target/led.c
         src/target/usart.c
