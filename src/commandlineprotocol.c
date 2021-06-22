@@ -13,9 +13,11 @@ static IHexCommand_t ihexcmd;
 
 void commandlineprotocol_processLine(uint8_t * line){
 
+    ////////////////////////////////////////////////
     if(0 == strncmp(line, "erase sector", 11)){
         PRINTSTRING("Erase!\n")
     }
+    ////////////////////////////////////////////////
     else if(line[0] == ':'){
         IHexCommandParserStatus_t ihexstatus = ihexcommandparser_parse(line, &ihexcmd);
 
@@ -26,9 +28,11 @@ void commandlineprotocol_processLine(uint8_t * line){
             PRINTSTRING("INVALID IHEX COMMAND!!\n");
         }
     }
+    ////////////////////////////////////////////////
     else if(0 == strncmp(line, "verify", 6)){
         PRINTSTRING("Verify!\n")
     }
+    ////////////////////////////////////////////////
     else if(0 == strncmp(line, "help", 4)){
         PRINTSTRING("Help!\n")
     }

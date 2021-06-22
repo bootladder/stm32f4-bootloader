@@ -36,7 +36,7 @@ SET(PATH_TO_LINKERSCRIPT "../../src/hal/stm32f407.ld")
 
 
 set(COMMON_FLAGS " ")
-string(APPEND COMMON_FLAGS "  -g  -O0                 ")
+string(APPEND COMMON_FLAGS "  -g  -Os                 ")
 #string(APPEND COMMON_FLAGS " -Wall   -Wextra  -Wconversion                 ")
 
 set(CMAKE_C_FLAGS "  -std=c99                      ")
