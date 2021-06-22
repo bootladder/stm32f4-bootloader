@@ -10,8 +10,11 @@ include_directories(../src)
 add_executable(stm32f4-bootloader-test
         main_unit_test.c
         test_ihexcommandparser.c
+        test_bootloader.c
+        mockflash.c
 
         ../src/ihexcommandparser.c
+        ../src/bootloader.c
         ../src/hex2int.c
         )
 

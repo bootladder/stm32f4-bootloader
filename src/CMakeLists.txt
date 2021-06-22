@@ -11,8 +11,10 @@ add_executable(stm32f4-bootloader
         commandlineprotocol.c
         printing_help.c
         bootloader.c
+        bootloader_messages.c
         ihexcommandparser.c
         hex2int.c
+        flash.c
 
         target/led.c
         target/usart.c

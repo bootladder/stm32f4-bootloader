@@ -18,6 +18,7 @@ typedef struct {
 typedef enum {
     IHEXRECORDTYPE_DATA = 0,
     IHEXRECORDTYPE_ENDOFFILE = 1,
+    IHEXRECORDTYPE_EXTENDED_SEGMENT_ADDRESS = 2,
 } IHexRecordType_t;
 
 typedef enum {

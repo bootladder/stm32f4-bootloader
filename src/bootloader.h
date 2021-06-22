@@ -8,6 +8,7 @@
 #include "ihexcommandparser.h"
 
 void bootloader_process_ihexcommand(IHexCommand_t * ihexcmd);
+uint32_t bootloader_get_base_address(void);
 
 void bootloader_print_welcome(void);
 void bootloader_print_app_status(void);

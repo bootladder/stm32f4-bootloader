@@ -3,17 +3,31 @@
 //
 
 #include "bootloader.h"
-#include "printing_help.h"
+#include "flash.h"
 
+static uint32_t base_address = 0;
 
 void bootloader_process_ihexcommand(IHexCommand_t * ihexcmd){
-    
+
+    switch(ihexcmd->record_type) {
+
+        case IHEXRECORDTYPE_DATA:
+            // take the address offset and add it to the base
+
+            flash_write(base_address + ihexcmd->base_address_offset,
+                        ihexcmd->record_data,
+                        ihexcmd->record_length);
+            break;
+
+        case IHEXRECORDTYPE_EXTENDED_SEGMENT_ADDRESS:
+            //data contains 2 bytes, big endian, base address
+            //multiply by another 16 according to intel hex format
+            base_address = (256*ihexcmd->record_data[0] + ihexcmd->record_data[1]);
+            base_address = base_address*16;
+            break;
+    }
 }
 
-
-void bootloader_print_welcome(void){
-    PRINTSTRING("STM32F4 BOOTLOADER\n")
-}
-void bootloader_print_app_status(void){
-    PRINTSTRING("App Status:  Not Implemented\n")
+uint32_t bootloader_get_base_address(void) {
+    return base_address;
 }
