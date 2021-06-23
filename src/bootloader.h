@@ -6,9 +6,12 @@
 #define STM32F4_BOOTLOADER_BOOTLOADER_H
 
 #include "ihexcommandparser.h"
+#include "commandlineprotocol.h"
 
 void bootloader_process_ihexcommand(IHexCommand_t * ihexcmd);
 uint32_t bootloader_get_base_address(void);
+
+void bootloader_erase_sector( EraseSectorCommand_t * cmd);
 
 void bootloader_print_welcome(void);
 void bootloader_print_app_status(void);

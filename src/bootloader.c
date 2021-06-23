@@ -2,8 +2,10 @@
 // Created by steve on 6/17/21.
 //
 
+#include "target/usart.h"
 #include "bootloader.h"
 #include "flash.h"
+#include "printing_help.h"
 
 static uint32_t base_address = 0;
 
@@ -30,4 +32,13 @@ void bootloader_process_ihexcommand(IHexCommand_t * ihexcmd){
 
 uint32_t bootloader_get_base_address(void) {
     return base_address;
+}
+
+
+void bootloader_erase_sector( EraseSectorCommand_t * cmd){
+    PRINTSTRING("Erasing sector: ")
+    outbyte('0' + cmd->sector_number);
+    PRINTSTRING("\n")
+
+    flash_erase_sector(cmd->sector_number);
 }

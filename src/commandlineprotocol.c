@@ -8,14 +8,24 @@
 #include "printing_help.h"
 
 #include <string.h>
+#include <stdbool.h>
+
+static bool parse_erasesector_command(uint8_t * line, EraseSectorCommand_t * cmd);
+
 
 static IHexCommand_t ihexcmd;
+static EraseSectorCommand_t erasesectorcmd;
 
 void commandlineprotocol_processLine(uint8_t * line){
 
     ////////////////////////////////////////////////
     if(0 == strncmp(line, "erase sector", 11)){
-        PRINTSTRING("Erase!\n")
+        if(parse_erasesector_command(line, &erasesectorcmd)){
+            bootloader_erase_sector(&erasesectorcmd);
+        }
+        else{
+            PRINTSTRING("INVALID ERASE SECTOR COMMAND")
+        }
     }
     ////////////////////////////////////////////////
     else if(line[0] == ':'){
@@ -39,4 +49,15 @@ void commandlineprotocol_processLine(uint8_t * line){
     else{
         PRINTSTRING("Invalid Command!\n")
     }
+}
+
+
+
+static bool parse_erasesector_command(uint8_t * line, EraseSectorCommand_t * cmd){
+    //erase sector 4
+    if(line[13] < '0' || line[13] >= '9')
+        return false;
+
+    cmd ->sector_number = line[13] - '0';
+    return true;
 }
