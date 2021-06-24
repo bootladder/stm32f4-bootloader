@@ -23,7 +23,7 @@ void flash_write(uint32_t addr, uint8_t * data, uint8_t len){
 
 
     FLASH_Lock();
-    PRINTSTRING("Done\n")
+//    PRINTSTRING("Done\n")
 }
 
 
