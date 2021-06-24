@@ -49,6 +49,11 @@ static void readLine(uint8_t * buf){
             ;
 
         usart_rx_byte_received = false;
+
+        // SKIP CARRIAGE RETURNS.  IGNORE THEM ENTIRELY
+        if(usart_rx_byte_value == 0x0D)
+            continue;
+
         outbyte(usart_rx_byte_value);
 
         if(usart_rx_byte_value == '\n'){

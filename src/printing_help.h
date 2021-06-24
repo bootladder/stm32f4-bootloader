@@ -8,6 +8,7 @@
 #include <stdint.h>
 #define NEWLINE (uint8_t *)"\n"
 #define PRINTSTRING(a) printbuf((uint8_t *)a , sizeof(a));
+#define PRINTBYTE(a) printbuf((uint8_t *) &a , 1);
 
 void printbuf(uint8_t * buf, int size);
 void printfloat(float f);

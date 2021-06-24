@@ -7,7 +7,23 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-static void address_then_data_writes_correct_address(){
+static void extended_linear_address_changes_base(){
+    IHexCommand_t ihexcmd_set_addr;
+    ihexcmd_set_addr.record_type = IHEXRECORDTYPE_EXTENDED_LINEAR_ADDRESS;
+    ihexcmd_set_addr.base_address_offset = 0;
+    ihexcmd_set_addr.record_length = 0;
+    ihexcmd_set_addr.record_data[0] =0x08;
+    ihexcmd_set_addr.record_data[1] =0x00;
+
+    bootloader_process_ihexcommand(&ihexcmd_set_addr);
+
+    uint32_t addr =  bootloader_get_base_address();
+
+    if(0x08000000 != addr)
+        printf("Bad base address after extended LINEAR addr record: %08X\n", addr);
+}
+
+static void extended_segement_address_then_data_writes_correct_address(){
     mockflash_reset();
 
     IHexCommand_t ihexcmd_set_addr;
@@ -65,5 +81,7 @@ void test_bootloader(){
 
     data_calls_flashwrite();
     address_changes_address();
-    address_then_data_writes_correct_address();
+    extended_segement_address_then_data_writes_correct_address();
+
+    extended_linear_address_changes_base();
 }

@@ -27,6 +27,12 @@ void bootloader_process_ihexcommand(IHexCommand_t * ihexcmd){
             base_address = (256*ihexcmd->record_data[0] + ihexcmd->record_data[1]);
             base_address = base_address*16;
             break;
+
+        case IHEXRECORDTYPE_EXTENDED_LINEAR_ADDRESS:
+
+            base_address = (256*ihexcmd->record_data[0] + ihexcmd->record_data[1]);
+            base_address <<= 16;
+            break;
     }
 }
 
@@ -37,7 +43,8 @@ uint32_t bootloader_get_base_address(void) {
 
 void bootloader_erase_sector( EraseSectorCommand_t * cmd){
     PRINTSTRING("Erasing sector: ")
-    outbyte('0' + cmd->sector_number);
+    uint8_t numbyte = '0' + cmd->sector_number;
+    PRINTBYTE(numbyte)
     PRINTSTRING("\n")
 
     flash_erase_sector(cmd->sector_number);

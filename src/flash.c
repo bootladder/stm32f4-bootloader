@@ -17,7 +17,7 @@ void flash_write(uint32_t addr, uint8_t * data, uint8_t len){
     }
 
     if(status == FLASH_COMPLETE)
-        PRINTSTRING("WRITE COMPLETE\n")
+        PRINTSTRING("Y\n")
     else
         PRINTSTRING("WRITE NOT COMPLETE\n")
 

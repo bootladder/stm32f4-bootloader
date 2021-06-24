@@ -12,6 +12,7 @@ add_executable(stm32f4-bootloader-test
         test_ihexcommandparser.c
         test_bootloader.c
         mockflash.c
+        print.c
 
         ../src/ihexcommandparser.c
         ../src/bootloader.c
