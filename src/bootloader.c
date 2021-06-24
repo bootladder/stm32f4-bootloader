@@ -2,10 +2,9 @@
 // Created by steve on 6/17/21.
 //
 
-#include "target/usart.h"
+#include <stdbool.h>
 #include "bootloader.h"
 #include "flash.h"
-#include "printing_help.h"
 
 static uint32_t base_address = 0;
 
@@ -41,11 +40,11 @@ uint32_t bootloader_get_base_address(void) {
 }
 
 
-void bootloader_erase_sector( EraseSectorCommand_t * cmd){
-    PRINTSTRING("Erasing sector: ")
-    uint8_t numbyte = '0' + cmd->sector_number;
-    PRINTBYTE(numbyte)
-    PRINTSTRING("\n")
+bool bootloader_erase_sector(EraseSectorCommand_t * cmd){
+//    PRINTSTRING("Erasing sector: ")
+//    uint8_t numbyte = '0' + cmd->sector_number;
+//    PRINTBYTE(numbyte)
+//    PRINTSTRING("\n")
 
     flash_erase_sector(cmd->sector_number);
 }

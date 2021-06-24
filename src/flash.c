@@ -8,26 +8,22 @@
 
 static FLASH_Status status;
 
-void flash_write(uint32_t addr, uint8_t * data, uint8_t len){
+bool flash_write(uint32_t addr, uint8_t * data, uint8_t len){
 
     FLASH_Unlock();
 
     for(int i=0; i<len; i++){
         status = FLASH_ProgramByte(addr+i, data[i]);
+        if(status != FLASH_COMPLETE)
+            return false;
     }
 
-    if(status == FLASH_COMPLETE)
-        PRINTSTRING("Y\n")
-    else
-        PRINTSTRING("WRITE NOT COMPLETE\n")
-
-
     FLASH_Lock();
-//    PRINTSTRING("Done\n")
+    return true;
 }
 
 
-void flash_erase_sector(uint8_t sectornum){
+bool flash_erase_sector(uint8_t sectornum){
 
     uint16_t sector_enum;
 
@@ -47,10 +43,7 @@ void flash_erase_sector(uint8_t sectornum){
 
     status = FLASH_EraseSector(sector_enum, VoltageRange_3);
 
-    if(status == FLASH_COMPLETE)
-        PRINTSTRING("ERASE COMPLETE\n")
-    else
-        PRINTSTRING("ERASE  NOT COMPLETE\n")
-
     FLASH_Lock();
+
+    return (status == FLASH_COMPLETE);
 }

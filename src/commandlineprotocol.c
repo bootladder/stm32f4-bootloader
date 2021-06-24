@@ -21,7 +21,13 @@ void commandlineprotocol_processLine(uint8_t * line){
     ////////////////////////////////////////////////
     if(0 == strncmp(line, "erase sector", 11)){
         if(parse_erasesector_command(line, &erasesectorcmd)){
-            bootloader_erase_sector(&erasesectorcmd);
+
+            if(bootloader_erase_sector(&erasesectorcmd)){
+                PRINTSTRING("OK\n")
+            }
+            else{
+                PRINTSTRING("FAIL\n")
+            }
         }
         else{
             PRINTSTRING("INVALID ERASE SECTOR COMMAND")
