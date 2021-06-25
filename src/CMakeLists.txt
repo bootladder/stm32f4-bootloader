@@ -79,3 +79,11 @@ set(CMAKE_CXX_COMPILER "${TOOLCHAIN_PATH}/arm-none-eabi-g++")
 set(OBJCOPY            "${TOOLCHAIN_PATH}/arm-none-eabi-objcopy")
 set(CMAKE_ASM_COMPILER "${TOOLCHAIN_PATH}/arm-none-eabi-as")
 set(CMAKE_AR           "${TOOLCHAIN_PATH}/arm-none-eabi-ar")
+
+
+####################################
+# Post build commands
+###################################
+add_custom_command(TARGET stm32f4-bootloader POST_BUILD
+        COMMAND size stm32f4-bootloader
+        )
