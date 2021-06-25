@@ -13,13 +13,15 @@ static uint16_t _get_base_address_offset(uint8_t * line);
 static uint8_t _get_specified_checksum(uint8_t * line);
 static void _load_record_data(uint8_t * line, IHexCommand_t * cmd);
 
+static int32_t strlen_to_newline(uint8_t * line);
+
 IHexCommandParserStatus_t
 ihexcommandparser_parse(uint8_t * line, IHexCommand_t * cmd){
 
     if(line[0] != ':')
         return INTELHEXCOMMAND_INVALID_COMMAND;
 
-    uint8_t linelength = strlen(line);
+    uint8_t linelength = strlen_to_newline(line);
     if(linelength % 2 != 0)  //must be even length, INCLUDES NEWLINE
         return INTELHEXCOMMAND_INVALID_COMMAND;
 
@@ -40,7 +42,7 @@ ihexcommandparser_parse(uint8_t * line, IHexCommand_t * cmd){
 
 
 bool _is_valid_checksum(uint8_t * line){
-    uint8_t linelength = strlen(line);
+    uint8_t linelength = strlen_to_newline(line);
     uint8_t runningtotal = 0;
     //newline is len-1, cheksum is len-2, len-3
     uint8_t expectedchecksum = 16 * hex2int(line[linelength-3]);
@@ -63,7 +65,7 @@ bool _is_valid_data_length(uint8_t * line){
 
     expected_data_length *= 2;  //hex chars
 
-    uint8_t line_length = strlen(line);
+    uint8_t line_length = strlen_to_newline(line);
     // colon + length + address + record type + data + checksum + newline
     uint8_t expected_line_length = 1 + 2 + 4 + 2 + expected_data_length + 2 + 1;
 
@@ -100,7 +102,7 @@ static uint16_t _get_base_address_offset(uint8_t * line){
 }
 
 static uint8_t _get_specified_checksum(uint8_t * line){
-    uint8_t linelength = strlen(line);
+    uint8_t linelength = strlen_to_newline(line);
     //newline is len-1, cheksum is len-2, len-3
     uint8_t expectedchecksum = 16 * hex2int(line[linelength-3]);
     expectedchecksum += hex2int(line[linelength-2]);
@@ -109,7 +111,7 @@ static uint8_t _get_specified_checksum(uint8_t * line){
 }
 
 static void _load_record_data(uint8_t * line, IHexCommand_t * cmd) {
-    uint8_t linelength = strlen(line);
+    uint8_t linelength = strlen_to_newline(line);
     //newline is len-1, cheksum is len-2, len-3
 
     // start after colon,
@@ -119,4 +121,15 @@ static void _load_record_data(uint8_t * line, IHexCommand_t * cmd) {
         uint8_t bytevalue = 16*hex2int(line[i]) + hex2int(line[i+1]);
         cmd->record_data[zz] = bytevalue;
     }
+}
+
+/*
+ * ASSUMES STRING MAX LENGTH
+ */
+static int32_t strlen_to_newline(uint8_t * line){
+    for(uint8_t i = 0; i< 200; i++){
+        if(line[i] == '\n')
+            return i+1;
+    }
+    return 0;
 }
