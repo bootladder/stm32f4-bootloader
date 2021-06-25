@@ -5,8 +5,8 @@
 #include "commandlineprotocol.h"
 #include "bootloader.h"
 #include "ihexcommandparser.h"
-#include "printing_help.h"
 
+#include "printing_help.h"
 #include <string.h>
 #include <stdbool.h>
 
@@ -63,6 +63,12 @@ void commandlineprotocol_processLine(uint8_t * line){
     else if(0 == strncmp(line, "verify", 6)){
         PRINTSTRING("Verify!\n")
     }
+     ////////////////////////////////////////////////
+        else if(0 == strncmp(line, "jump", 4)){
+            PRINTSTRING("JUMP!\n")
+            bootloader_jump_to_application();
+        }
+
     ////////////////////////////////////////////////
     else if(0 == strncmp(line, "help", 4)){
         PRINTSTRING("Help!\n")

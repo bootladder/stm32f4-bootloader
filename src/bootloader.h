@@ -13,6 +13,7 @@ bool bootloader_process_ihexcommand(IHexCommand_t * ihexcmd);
 uint32_t bootloader_get_base_address(void);
 
 bool bootloader_erase_sector(EraseSectorCommand_t * cmd);
+void bootloader_jump_to_application(void);
 
 void bootloader_print_welcome(void);
 void bootloader_print_app_status(void);
