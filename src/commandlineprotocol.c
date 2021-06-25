@@ -15,9 +15,12 @@ static bool parse_erasesector_command(uint8_t * line, EraseSectorCommand_t * cmd
 
 static IHexCommand_t ihexcmd;
 static EraseSectorCommand_t erasesectorcmd;
+static uint32_t number_of_commands_processed = 0;
+
+
 
 void commandlineprotocol_processLine(uint8_t * line){
-
+    number_of_commands_processed++;
     ////////////////////////////////////////////////
     if(0 == strncmp(line, "erase sector", 11)){
         if(parse_erasesector_command(line, &erasesectorcmd)){
@@ -38,12 +41,22 @@ void commandlineprotocol_processLine(uint8_t * line){
         IHexCommandParserStatus_t ihexstatus = ihexcommandparser_parse(line, &ihexcmd);
 
         if(INTELHEXCOMMAND_OK == ihexstatus){
-            bootloader_process_ihexcommand(&ihexcmd);
-            PRINTSTRING("OK\n")
-            // ADD MORE ERROR HANDLING
+
+            if(bootloader_process_ihexcommand(&ihexcmd)){
+                PRINTSTRING("OK\n")
+            }
+            else{
+                PRINTSTRING("FAIL IHEX COMMAND\n")
+            }
         }
-        else{
-            PRINTSTRING("INVALID IHEX COMMAND!!\n");
+        else if(INTELHEXCOMMAND_INVALID_LENGTH == ihexstatus){
+            PRINTSTRING("INVALID IHEX LENGTH!!\n")
+        }
+        else if(INTELHEXCOMMAND_INVALID_COMMAND == ihexstatus){
+            PRINTSTRING("INVALID IHEX COMMANDTYPE!\n")
+        }
+        else if(INTELHEXCOMMAND_BAD_CHECKSUM == ihexstatus){
+            PRINTSTRING("INVALID IHEX CHECKSUM!\n")
         }
     }
     ////////////////////////////////////////////////

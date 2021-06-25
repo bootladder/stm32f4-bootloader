@@ -9,7 +9,7 @@
 #include "commandlineprotocol.h"
 #include <stdbool.h>
 
-void bootloader_process_ihexcommand(IHexCommand_t * ihexcmd);
+bool bootloader_process_ihexcommand(IHexCommand_t * ihexcmd);
 uint32_t bootloader_get_base_address(void);
 
 bool bootloader_erase_sector(EraseSectorCommand_t * cmd);

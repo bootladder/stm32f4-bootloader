@@ -11,6 +11,22 @@
 #include "hex2int.h"
 #include <string.h>
 
+static void extended_linear_address_populates_correctly(){
+    uint8_t * line;
+    IHexCommand_t cmd;
+    IHexCommandParserStatus_t status;
+    uint8_t * expected_data;
+
+    line =  ":020000040800F2\n";
+    status = ihexcommandparser_parse(line, &cmd);
+
+    if(cmd.record_type != IHEXRECORDTYPE_EXTENDED_LINEAR_ADDRESS) printf("record type not linear address");
+    if(cmd.base_address_offset != 0) printf("base address offset not zero");
+    if(cmd.record_data[0] != 0x08) printf("wrong data 1");
+    if(cmd.record_data[1] != 0x00) printf("wrong data 2");
+
+}
+
 static void good_ones_check_status_and_struct_content(){
     uint8_t * line;
     IHexCommand_t cmd;
@@ -64,6 +80,14 @@ static void good_ones_check_status_and_struct_content(){
         printf("3 FAIL NOT GOOD, status is %d\n", status);
 
     if(cmd.record_type != IHEXRECORDTYPE_ENDOFFILE) printf("record type not 1");
+
+
+//////////////////////////////
+    line = ":084180005DCF00085DCF0008CF\n";
+    status = ihexcommandparser_parse(line, &cmd);
+
+    if(status != INTELHEXCOMMAND_OK)
+        printf("4 FAIL NOT GOOD, status is %d\n", status);
 
 }
 
@@ -170,4 +194,5 @@ void test_ihexcommandparser(){
     record_data_length();
     record_type();
     good_ones_check_status_and_struct_content();
+    extended_linear_address_populates_correctly();
 }

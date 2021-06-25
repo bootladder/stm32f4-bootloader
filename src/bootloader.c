@@ -8,7 +8,8 @@
 
 static uint32_t base_address = 0;
 
-void bootloader_process_ihexcommand(IHexCommand_t * ihexcmd){
+
+bool bootloader_process_ihexcommand(IHexCommand_t * ihexcmd){
 
     switch(ihexcmd->record_type) {
 
