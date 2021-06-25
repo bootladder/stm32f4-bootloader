@@ -15,7 +15,7 @@ add_executable(stm32f4-bootloader
         ihexcommandparser.c
         hex2int.c
         flash.c
-        jumptoapplication.c
+        applicationmanager.c
 
         target/led.c
         target/usart.c

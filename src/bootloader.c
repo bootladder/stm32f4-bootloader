@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "bootloader.h"
 #include "flash.h"
-#include "jumptoapplication.h"
+#include "applicationmanager.h"
 
 static uint32_t base_address = 0;
 
@@ -53,5 +53,5 @@ bool bootloader_erase_sector(EraseSectorCommand_t * cmd){
 
 
 void bootloader_jump_to_application(void) {
-    jumptoapplication_jumptoapplication();
+    applicationmanager_jumptoapplication();
 }
