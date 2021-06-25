@@ -54,7 +54,8 @@ static void readLine(uint8_t * buf){
         if(usart_rx_byte_value == 0x0D)
             continue;
 
-        outbyte(usart_rx_byte_value);
+        //echo back out
+        //outbyte(usart_rx_byte_value);
 
         if(usart_rx_byte_value == '\n'){
             buf[readLineIndex++] = usart_rx_byte_value;

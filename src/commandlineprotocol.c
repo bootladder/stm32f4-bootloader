@@ -39,6 +39,8 @@ void commandlineprotocol_processLine(uint8_t * line){
 
         if(INTELHEXCOMMAND_OK == ihexstatus){
             bootloader_process_ihexcommand(&ihexcmd);
+            PRINTSTRING("OK\n")
+            // ADD MORE ERROR HANDLING
         }
         else{
             PRINTSTRING("INVALID IHEX COMMAND!!\n");
