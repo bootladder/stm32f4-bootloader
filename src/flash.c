@@ -8,12 +8,18 @@
 
 static FLASH_Status status;
 
+/*
+ * TODO CHECK FOR LENGTH NOT DIVISIBLE BY 4 ie WORD BOUNDARY
+ */
 bool flash_write(uint32_t addr, uint8_t * data, uint8_t len){
 
     FLASH_Unlock();
 
-    for(int i=0; i<len; i++){
-        status = FLASH_ProgramByte(addr+i, data[i]);
+    uint32_t * worddata = (uint32_t * ) data;
+    uint8_t wordlen = len >> 2;
+
+    for(int i=0; i<wordlen; i++){
+        status = FLASH_ProgramWord(addr+(i*4), worddata[i]);
         if(status != FLASH_COMPLETE)
             return false;
     }
