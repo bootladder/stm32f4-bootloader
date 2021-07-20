@@ -15,6 +15,7 @@ extern volatile bool usart_rx_byte_received;
 extern volatile uint8_t usart_rx_byte_value;
 
 static uint32_t readLineIndex = 0;
+static uint8_t lineBuf[256];
 
 static void readLine(uint8_t * buf);
 
@@ -33,7 +34,7 @@ int main(void){
 
     // else serve CLI interface
 
-    static uint8_t lineBuf[256];
+
 
     while(1){
         readLine(lineBuf);
